@@ -18,7 +18,7 @@ Se incluyen para ilustrar la estructura inicial de la interfaz de usuario.
 ### Sesion estudiante
 ![Mockup 2](./docs/mockup_2.png)
 
-### Sesion decanmo
+### Sesion decano
 ![Mockup 3](./docs/mockup_3.png)
 
 ### Informacion de solicitud
@@ -52,18 +52,6 @@ https://www.figma.com/design/1Nz6BQJcoVEMoVQmsHt7AY/Sin-t%C3%ADtulo?node-id=0-1&
 
 ---
 
-## Estructura del Proyecto
-
-PROFESORSUPERO-FRONT/
-│── docs/                # Diagramas y mockups (pantallazos del Figma)
-│── src/                 # Archivos del prototipo FrontEnd
-│   ├── index.html       # Página principal
-│   ├── styles.css       # Estilos
-│   └── app.js           # Lógica inicial en JS
-│── README.md            # Documentación
-
-
----
 
 ## Estrategia de Versionamiento y Branches
 
