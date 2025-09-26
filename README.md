@@ -13,41 +13,37 @@ Los siguientes pantallazos corresponden al prototipo elaborado en Figma.
 Se incluyen para ilustrar la estructura inicial de la interfaz de usuario.
 
 ### Iniciar sesion
-![Mockup 1](./docs/mockup_1.png)
+![alt text](./docs/mockup1.png)
+
+![alt text](./docs/mockup2.png)
 
 ### Sesion estudiante
-![Mockup 2](./docs/mockup_2.png)
-
-### Sesion decano
-![Mockup 3](./docs/mockup_3.png)
-
-### Informacion de solicitud
-![Mockup 4](./docs/mockup_4.png)
-
-### Crear solicitud
-![Mockup 5](./docs/mockup_5.png)
+![alt text](./docs/mockup3.png)
 
 ### Sesion administrador
-![Mockup 6](./docs/mockup_6.png)
+![alt text](./docs/mockup4.png)
+
+### Crear solicitud
+![alt text](./docs/mockup5.png)
+
+### Ver solicitudes
+![alt text](./docs/mockup6.png)
+
+### Ver horario
+![alt text](./docs/mockup7.png)
+
+### Ver semaforo
+![alt text](./docs/mockup8.png)
 
 ### Administrar asignatura
-![Mockup 7](./docs/mockup_7.png)
+![alt text](./docs/mockup9.png)
 
-### Administrar horarios
-![Mockup 8](./docs/mockup_8.png)
-
-### Administrar grupos
-![Mockup 9](./docs/mockup_9.png)
-
-### Administrar profesores
-![Mockup 10](./docs/mockup_10.png)
-
-### Administrar materias
-![Mockup 11](./docs/mockup_11.png)
+## Administrar horarios
+![alt text](./docs/mockup10.png)
 
 Los archivos fuente del prototipo se encuentran en Figma, y aquí se documentan mediante imágenes.
 
-https://www.figma.com/design/1Nz6BQJcoVEMoVQmsHt7AY/Sin-t%C3%ADtulo?node-id=0-1&t=V0tE7SqwgQnL9BfJ-1
+https://www.figma.com/design/Mc7HWn9QLE4IM543NLuMMm/mockups-SIRHA?node-id=0-1&t=PfHQv5itbRaoEREw-1
 
 
 ---
@@ -63,9 +59,9 @@ https://www.figma.com/design/1Nz6BQJcoVEMoVQmsHt7AY/Sin-t%C3%ADtulo?node-id=0-1&
 ---
 
 ## Autores
-- Sebastian Barrios
+- Sebastián Barros
 - Nicolas Duarte
-- Julian Ramirez
+- Julián Ramirez
 - Juan Rangel
 - Santiago Suarez  
 
