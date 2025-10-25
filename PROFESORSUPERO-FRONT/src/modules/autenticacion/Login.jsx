@@ -17,7 +17,11 @@ function Login() {
         e.preventDefault();
         if (!rol || !username || !password) return;
 
-        if (rol === "estudiante") navigate("/dashboard/estudiante");
+        if (rol === "estudiante") {
+            navigate("/dashboard/estudiante");
+        } else if (rol == "decanatura") {
+            navigate("/dashboard/decano")
+        }
     };
 
     return (
