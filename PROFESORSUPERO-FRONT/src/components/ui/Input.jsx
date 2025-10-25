@@ -1,28 +1,22 @@
+"use client"
+
 // src/components/ui/Input.jsx
-function Input({
-                   label,
-                   type = "text",
-                   value,
-                   onChange,
-                   placeholder,
-                   required = false,
-                   className = "",
-               }) {
+function Input({ label, type = "text", name, value, onChange, placeholder, required = false, className = "" }) {
     return (
-        <div className={`flex flex-col mb-4 ${className}`}>
-            {label && (
-                <label className="mb-1 text-sm font-medium text-gray-700">{label}</label>
-            )}
+        <div className="mb-4">
+            {label && <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>}
             <input
                 type={type}
+                name={name}
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
                 required={required}
-                className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${className}`}
             />
         </div>
-    );
+    )
 }
 
-export default Input;
+export default Input
+

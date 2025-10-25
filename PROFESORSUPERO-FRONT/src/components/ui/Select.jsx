@@ -1,14 +1,15 @@
+"use client"
+
 // src/components/ui/Select.jsx
-function Select({ label, options = [], value, onChange, className = "" }) {
+function Select({ label, options = [], value, onChange, name, className = "" }) {
     return (
-        <div className={`flex flex-col mb-4 ${className}`}>
-            {label && (
-                <label className="mb-1 text-sm font-medium text-gray-700">{label}</label>
-            )}
+        <div className="mb-4">
+            {label && <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>}
             <select
+                name={name}
                 value={value}
                 onChange={onChange}
-                className="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${className}`}
             >
                 {options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -17,7 +18,7 @@ function Select({ label, options = [], value, onChange, className = "" }) {
                 ))}
             </select>
         </div>
-    );
+    )
 }
 
-export default Select;
+export default Select
