@@ -3,6 +3,7 @@ import DashboardEstudiante from "../modules/estudiante/DashboardEstudiante"
 import CrearSolicitud from "../modules/estudiante/CrearSolicitud"
 import VerSolicitudes from "../modules/estudiante/VerSolicitudes"
 import VerHorario from "../modules/estudiante/VerHorario"
+import DashboardDecano from "../modules/decanatura/DashboardDecanatura.jsx";
 
 function DashboardRoutes() {
     return (
@@ -11,10 +12,9 @@ function DashboardRoutes() {
             <Route path="/estudiante/crear-solicitud" element={<CrearSolicitud />} />
             <Route path="/estudiante/solicitudes" element={<VerSolicitudes />} />
             <Route path="/estudiante/horario" element={<VerHorario />} />
+            <Route path="decano" element={<DashboardDecano />} />
         </Routes>
-    )
+    );
 }
 
-export default DashboardRoutes
-
-
+export default DashboardRoutes;
