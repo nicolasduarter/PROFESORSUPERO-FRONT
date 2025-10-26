@@ -48,7 +48,7 @@ function DashboardAdministrador() {
                             <a href="/dashboard/administrador" className="hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
                                 Dashboard
                             </a>
-                            <a href="#" className="hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            <a href="/dashboard/admin/solicitudes" className="hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
                                 Solicitudes
                             </a>
                             <button className="hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
@@ -107,7 +107,7 @@ function DashboardAdministrador() {
                                     </div>
                                 </a>
 
-                                <a href="/admin/fechas">
+                                <a href="/dashboard/admin/fechas">
                                     <div className="bg-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
                                         <div className="flex flex-col items-center text-center">
                                             <div className="bg-gray-400 rounded-full p-4 mb-3">
@@ -147,7 +147,7 @@ function DashboardAdministrador() {
                                 <h2 className="text-xl font-semibold text-gray-800">Gestión de Solicitudes</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <a href="/admin/solicitudes">
+                                <a href="/dashboard/admin/solicitudes">
                                     <div className="bg-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
                                         <div className="flex flex-col items-center text-center">
                                             <div className="bg-gray-400 rounded-full p-4 mb-3">

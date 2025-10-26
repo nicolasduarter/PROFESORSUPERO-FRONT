@@ -8,6 +8,8 @@ import DashboardAdministrador from "../modules/administrador/DashboardAdministra
 import AdministrarUsuarios from "../modules/administrador/AdministrarUsuarios.jsx";
 import AdministrarAsignaturas from "../modules/administrador/AdministrarAsignaturas.jsx";
 import ReportesEstadisticas from "../modules/decanatura/ReportesEstadisticas.jsx";
+import AdministrarFechas from "../modules/administrador/AdministrarFechas.jsx";
+import VerSolicitudesAdmin from "../modules/administrador/VerSolicitudesAdmin.jsx";
 
 function DashboardRoutes() {
     return (
@@ -17,10 +19,13 @@ function DashboardRoutes() {
             <Route path="/estudiante/solicitudes" element={<VerSolicitudes />} />
             <Route path="/estudiante/horario" element={<VerHorario />} />
             <Route path="decano" element={<DashboardDecano />} />
+            <Route path="decano/reportes" element={<ReportesEstadisticas />} />
             <Route path="/administrador" element={<DashboardAdministrador />} />
             <Route path="/admin/usuarios" element={<AdministrarUsuarios />} />
             <Route path="/admin/asignaturas" element={<AdministrarAsignaturas />} />
-            <Route path="decano/reportes" element={<ReportesEstadisticas />} />
+            <Route path="/admin/fechas" element={<AdministrarFechas />} />
+            <Route path="/admin/solicitudes" element={<VerSolicitudesAdmin />} />
+
         </Routes>
     );
 }
