@@ -21,6 +21,8 @@ function Login() {
             navigate("/dashboard/estudiante");
         } else if (rol == "decanatura") {
             navigate("/dashboard/decano")
+        } else if (rol === "administrador") {
+            navigate("/dashboard/administrador");
         }
     };
 
