@@ -7,6 +7,7 @@ import DashboardDecano from "../modules/decanatura/DashboardDecanatura.jsx";
 import DashboardAdministrador from "../modules/administrador/DashboardAdministrador.jsx";
 import AdministrarUsuarios from "../modules/administrador/AdministrarUsuarios.jsx";
 import AdministrarAsignaturas from "../modules/administrador/AdministrarAsignaturas.jsx";
+import ReportesEstadisticas from "../modules/decanatura/ReportesEstadisticas.jsx";
 
 function DashboardRoutes() {
     return (
@@ -19,6 +20,7 @@ function DashboardRoutes() {
             <Route path="/administrador" element={<DashboardAdministrador />} />
             <Route path="/admin/usuarios" element={<AdministrarUsuarios />} />
             <Route path="/admin/asignaturas" element={<AdministrarAsignaturas />} />
+            <Route path="decano/reportes" element={<ReportesEstadisticas />} />
         </Routes>
     );
 }

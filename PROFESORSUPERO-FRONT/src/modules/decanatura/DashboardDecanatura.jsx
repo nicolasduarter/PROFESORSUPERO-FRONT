@@ -1,7 +1,7 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 function DashboardDecano() {
-    // Estado para las estadísticas
     const [stats] = useState({
         pendientes: 12,
         enProceso: 8,
@@ -9,7 +9,6 @@ function DashboardDecano() {
         total: 44,
     })
 
-    // Estado para los avisos importantes
     const [avisos] = useState([
         {
             id: 1,
@@ -23,7 +22,6 @@ function DashboardDecano() {
         },
     ])
 
-    // Estado para las solicitudes recientes
     const [solicitudes, setSolicitudes] = useState([
         {
             id: "#SOL-2025-001",
@@ -35,6 +33,8 @@ function DashboardDecano() {
             tipo: "Cambio de grupo",
             descripcion:
                 "Solicito el cambio de grupo debido a un conflicto de horario con mi trabajo de medio tiempo. El grupo actual tiene clases los martes y jueves en la mañana, y necesito un grupo en la tarde para poder asistir.",
+            grupoActual: "A01",
+            grupoNuevo: "B02",
         },
         {
             id: "#SOL-2025-002",
@@ -45,50 +45,59 @@ function DashboardDecano() {
             estado: "En Proceso",
             tipo: "Cambio de materia",
             descripcion:
-                "Deseo cambiar la asignatura de Fundamentos Contables y Financieros por __ para permitirme ver 18 créditos este semestre.",
+                "Deseo cambiar de Fundamentos Contables y Financieros a Macroeconomía para completar los 18 créditos en el semestre.",
+            materiaActual: "Fundamentos Contables y Financieros",
+            grupoActual: "FCFI1",
+            materiaNueva: "Macroeconomía",
+            grupoNuevo: "MAEC4",
         },
         {
             id: "#SOL-2025-003",
             nombre: "Carlos Rodríguez",
-            programa: "Ingniería Mecánica",
+            programa: "Ingeniería Mecánica",
             curso: "Resistencia de Materiales",
             fecha: "8 de marzo, 2025",
             estado: "Pendiente",
             tipo: "Cancelación",
             descripcion:
-                "Por motivos bajos rendimientos en el periodo académico actual, deseo cancelar la materia de Resistencia de Materiales para evitar afectar mi promedio.",
+                "Por motivos de bajo rendimiento en la asignatura, necesito cancelarla para evitar afectar mi promedio."
         },
         {
             id: "#SOL-2025-004",
             nombre: "Laura Fernández",
-            programa: "Ingeniería Electrónica",
+            programa: "Ingeniería Elecrónica",
             curso: "Campos Electromagnéticos",
             fecha: "7 de marzo, 2025",
             estado: "Aprobada",
             tipo: "Cambio de grupo",
             descripcion:
-                "Solicito cambio de grupo por cuestión de tiempos de traslado. El grupo __ se ajusta mejor a mi carga académica actual.",
+                "Solicito cambio de grupo por incompatibilidad de horario con otra asignatura obligatoria de mi programa. El grupo CAEM6 se ajusta mejor a mi carga académica actual.",
+            grupoActual: "CAEM7",
+            grupoNuevo: "CAEM6",
         },
     ])
 
-    // Estado para el sidebar activo (móvil)
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    // Estado para el modal de detalles de solicitud
     const [modalAbierto, setModalAbierto] = useState(false)
     const [solicitudSeleccionada, setSolicitudSeleccionada] = useState(null)
 
-    // Función para aprobar solicitud
+    const navigate = useNavigate()
+
     const handleAprobar = (id) => {
         setSolicitudes(solicitudes.map((sol) => (sol.id === id ? { ...sol, estado: "Aprobada" } : sol)))
     }
 
-    // Función para rechazar solicitud
     const handleRechazar = (id) => {
         setSolicitudes(solicitudes.map((sol) => (sol.id === id ? { ...sol, estado: "Rechazada" } : sol)))
     }
 
-    // Función para obtener el color del badge según el estado
+    const handleSolicitarInfo = (id) => {
+        // TODO: Integrate with API to send request for additional information
+        alert(`Se ha enviado una solicitud de información adicional al estudiante para la solicitud ${id}`)
+        setSolicitudes(solicitudes.map((sol) => (sol.id === id ? { ...sol, estado: "En Proceso" } : sol)))
+    }
+
     const getBadgeColor = (estado) => {
         switch (estado) {
             case "Pendiente":
@@ -104,7 +113,6 @@ function DashboardDecano() {
         }
     }
 
-    // Función para obtener el icono según el tipo de solicitud
     const getTipoIcon = (tipo) => {
         switch (tipo) {
             case "Cambio de grupo":
@@ -118,21 +126,22 @@ function DashboardDecano() {
         }
     }
 
-    // Función para manejar el clic en "Ver Detalles"
     const handleVerDetalles = (solicitud) => {
         setSolicitudSeleccionada(solicitud)
         setModalAbierto(true)
     }
 
-    // Función para cerrar el modal
     const handleCerrarModal = () => {
         setModalAbierto(false)
         setSolicitudSeleccionada(null)
     }
 
+    const handleCerrarSesion = () => {
+        navigate("/")
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 flex">
-            {/* Sidebar */}
             <aside
                 className={`
                 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
@@ -171,7 +180,7 @@ function DashboardDecano() {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth={2}
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                                 />
                             </svg>
                             Solicitudes
@@ -240,14 +249,11 @@ function DashboardDecano() {
                 </div>
             </aside>
 
-            {/* Overlay para cerrar sidebar en móvil */}
             {sidebarOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />
             )}
 
-            {/* Main Content */}
             <div className="flex-1 flex flex-col">
-                {/* Top Navigation Bar */}
                 <header className="bg-gray-900 text-white shadow-lg">
                     <div className="px-4 sm:px-6 lg:px-8 py-4">
                         <div className="flex justify-between items-center">
@@ -267,7 +273,10 @@ function DashboardDecano() {
                                 <a href="#" className="hover:text-green-400 transition-colors">
                                     Solicitudes
                                 </a>
-                                <button className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors">
+                                <button
+                                    onClick={handleCerrarSesion}
+                                    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
+                                >
                                     Cerrar Sesión
                                 </button>
                             </nav>
@@ -275,15 +284,12 @@ function DashboardDecano() {
                     </div>
                 </header>
 
-                {/* Main Content Area */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-                    {/* Page Header */}
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-gray-900">¡Bienvenido, Decano!</h1>
                         <p className="text-gray-600 mt-1">Gestión de solicitudes académicas</p>
                     </div>
 
-                    {/* Stats Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-6 text-white shadow-lg">
                             <div className="flex items-center gap-4">
@@ -362,12 +368,14 @@ function DashboardDecano() {
                         </div>
                     </div>
 
-                    {/* Solicitudes Recientes Section */}
                     <div className="bg-white rounded-xl shadow-lg">
                         <div className="p-6 border-b border-gray-200">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-xl font-bold text-gray-900">Solicitudes Recientes</h2>
-                                <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+                                <button
+                                    onClick={() => navigate("/dashboard/decano/reportes")}
+                                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                                >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path
                                             strokeLinecap="round"
@@ -442,17 +450,14 @@ function DashboardDecano() {
                     </div>
                 </main>
 
-                {/* Footer */}
                 <footer className="bg-gray-900 text-white text-center py-4">
                     <p className="text-sm">© 2025 SIRHA - Sistema Integral de Recursos Humanos Académicos</p>
                 </footer>
             </div>
 
-            {/* Modal para detalles de solicitud */}
             {modalAbierto && solicitudSeleccionada && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                        {/* Modal Header */}
                         <div className="bg-gradient-to-r from-green-400 to-green-500 p-6 rounded-t-xl">
                             <div className="flex justify-between items-start">
                                 <div>
@@ -470,9 +475,7 @@ function DashboardDecano() {
                             </div>
                         </div>
 
-                        {/* Modal Body */}
                         <div className="p-6 space-y-6">
-                            {/* Student Information */}
                             <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                                 <h3 className="text-lg font-bold text-gray-900 mb-3">Información del Estudiante</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -495,7 +498,6 @@ function DashboardDecano() {
                                 </div>
                             </div>
 
-                            {/* Request Type */}
                             <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                                 <h3 className="text-lg font-bold text-gray-900 mb-3">Tipo de Solicitud</h3>
                                 <div className="flex items-center gap-3">
@@ -511,37 +513,97 @@ function DashboardDecano() {
                                 </div>
                             </div>
 
-                            {/* Description */}
+                            {solicitudSeleccionada.tipo === "Cambio de materia" && (
+                                <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-3">Detalles del Cambio de Materia</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="bg-white rounded-lg p-3 border border-green-300">
+                                            <p className="text-xs text-gray-600 mb-1">Materia Actual</p>
+                                            <p className="font-semibold text-gray-900">{solicitudSeleccionada.materiaActual}</p>
+                                            <p className="text-sm text-gray-700 mt-1">
+                                                <span className="font-medium">Grupo:</span> {solicitudSeleccionada.grupoActual}
+                                            </p>
+                                        </div>
+                                        <div className="bg-white rounded-lg p-3 border border-green-300">
+                                            <p className="text-xs text-gray-600 mb-1">Materia Nueva</p>
+                                            <p className="font-semibold text-green-700">{solicitudSeleccionada.materiaNueva}</p>
+                                            <p className="text-sm text-gray-700 mt-1">
+                                                <span className="font-medium">Grupo:</span> {solicitudSeleccionada.grupoNuevo}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {solicitudSeleccionada.tipo === "Cambio de grupo" && (
+                                <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-3">Detalles del Cambio de Grupo</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="bg-white rounded-lg p-3 border border-green-300">
+                                            <p className="text-xs text-gray-600 mb-1">Grupo Actual</p>
+                                            <p className="font-semibold text-gray-900 text-2xl">{solicitudSeleccionada.grupoActual}</p>
+                                        </div>
+                                        <div className="bg-white rounded-lg p-3 border border-green-300">
+                                            <p className="text-xs text-gray-600 mb-1">Grupo Nuevo</p>
+                                            <p className="font-semibold text-green-700 text-2xl">{solicitudSeleccionada.grupoNuevo}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                                 <h3 className="text-lg font-bold text-gray-900 mb-3">Descripción / Justificación</h3>
                                 <p className="text-gray-700 leading-relaxed">{solicitudSeleccionada.descripcion}</p>
                             </div>
 
-                            {/* Action Buttons */}
                             {solicitudSeleccionada.estado !== "Aprobada" && solicitudSeleccionada.estado !== "Rechazada" && (
-                                <div className="flex gap-3 pt-4 border-t border-gray-200">
-                                    <button
-                                        onClick={() => {
-                                            handleAprobar(solicitudSeleccionada.id)
-                                            handleCerrarModal()
-                                        }}
-                                        className="flex-1 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-                                    >
-                                        ✓ Aprobar Solicitud
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            handleRechazar(solicitudSeleccionada.id)
-                                            handleCerrarModal()
-                                        }}
-                                        className="flex-1 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-                                    >
-                                        ✗ Rechazar Solicitud
-                                    </button>
-                                </div>
+                                <>
+                                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                        <button
+                                            onClick={() => {
+                                                handleSolicitarInfo(solicitudSeleccionada.id)
+                                                handleCerrarModal()
+                                            }}
+                                            className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                                        >
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                            Solicitar Información Adicional
+                                        </button>
+                                        <p className="text-xs text-blue-700 mt-2 text-center">
+                                            El estudiante recibirá una notificación para proporcionar más detalles
+                                        </p>
+                                    </div>
+
+                                    <div className="flex gap-3 pt-4 border-t border-gray-200">
+                                        <button
+                                            onClick={() => {
+                                                handleAprobar(solicitudSeleccionada.id)
+                                                handleCerrarModal()
+                                            }}
+                                            className="flex-1 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                                        >
+                                            ✓ Aprobar Solicitud
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                handleRechazar(solicitudSeleccionada.id)
+                                                handleCerrarModal()
+                                            }}
+                                            className="flex-1 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                                        >
+                                            ✗ Rechazar Solicitud
+                                        </button>
+                                    </div>
+                                </>
                             )}
 
-                            {/* Close Button */}
                             <button
                                 onClick={handleCerrarModal}
                                 className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors"
