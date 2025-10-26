@@ -95,7 +95,7 @@ function DashboardAdministrador() {
                                     </div>
                                 </a>
 
-                                <a href="/admin/asignatura">
+                                <a href="/dashboard/admin/asignaturas">
                                     <div className="bg-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
                                         <div className="flex flex-col items-center text-center">
                                             <div className="bg-gray-400 rounded-full p-4 mb-3">
