@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaCalendarAlt, FaBook, FaCalendarCheck, FaUsers, FaClipboardList, FaFileAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaBook, FaCalendarCheck, FaUsers, FaClipboardList, FaFileAlt, FaUserFriends } from 'react-icons/fa';
 
 function DashboardAdministrador() {
     const [adminData] = useState({
@@ -83,26 +83,26 @@ function DashboardAdministrador() {
                                 <h2 className="text-xl font-semibold text-gray-800">Gestión Académica</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <a href="/admin/horario">
-                                    <div className="bg-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
-                                        <div className="flex flex-col items-center text-center">
-                                            <div className="bg-gray-400 rounded-full p-4 mb-3">
-                                                <FaCalendarAlt className="text-2xl text-gray-700" />
-                                            </div>
-                                            <h3 className="font-semibold text-gray-900 mb-1">Administrar Horario</h3>
-                                            <p className="text-sm text-gray-600">Gestionar horarios académicos</p>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a href="/dashboard/admin/asignaturas">
+                                <a href="/dashboard/admin/materias">
                                     <div className="bg-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
                                         <div className="flex flex-col items-center text-center">
                                             <div className="bg-gray-400 rounded-full p-4 mb-3">
                                                 <FaBook className="text-2xl text-gray-700" />
                                             </div>
-                                            <h3 className="font-semibold text-gray-900 mb-1">Administrar Asignatura</h3>
-                                            <p className="text-sm text-gray-600">Gestionar asignaturas</p>
+                                            <h3 className="font-semibold text-gray-900 mb-1">Administrar Materias</h3>
+                                            <p className="text-sm text-gray-600">Gestionar catálogo de materias</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <a href="/dashboard/admin/grupos">
+                                    <div className="bg-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                                        <div className="flex flex-col items-center text-center">
+                                            <div className="bg-gray-400 rounded-full p-4 mb-3">
+                                                <FaUserFriends className="text-2xl text-gray-700" />
+                                            </div>
+                                            <h3 className="font-semibold text-gray-900 mb-1">Administrar Grupos</h3>
+                                            <p className="text-sm text-gray-600">Gestionar grupos y horarios</p>
                                         </div>
                                     </div>
                                 </a>
