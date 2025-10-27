@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
 import Button from "../../components/ui/Button";
+import api from "../../services/api";
 
 function Login() {
     const navigate = useNavigate();
@@ -13,18 +14,45 @@ function Login() {
     const [password, setPassword] = useState("");
     const [remember, setRemember] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!rol || !username || !password) return;
 
-        if (rol === "estudiante") {
-            navigate("/dashboard/estudiante");
-        } else if (rol == "decanatura") {
-            navigate("/dashboard/decano")
-        } else if (rol === "administrador") {
-            navigate("/dashboard/administrador");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!rol || !username || !password) {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+
+        try {
+            const response = await api.post("/Login/Autenticacion", {
+                usuario: username,
+                contra: password,
+            });
+
+            const userData = response.data;
+
+            console.log("✅ Login exitoso:", userData);
+
+            // Guardar los datos del usuario (por ejemplo, en localStorage)
+            localStorage.setItem("user", JSON.stringify(userData));
+
+            // Redirigir según el rol
+            if (userData.rol === "ESTUDIANTE") {
+                navigate("/dashboard/estudiante");
+            } else if (userData.rol === "DECANATURA") {
+                navigate("/dashboard/decano");
+            } else if (userData.rol === "ADMINISTRATOR") {
+                navigate("/dashboard/administrador");
+            } else {
+                alert("Rol no reconocido: " + userData.rol);
+            }
+
+        } catch (error) {
+            console.error("❌ Error al iniciar sesión:", error);
+            alert("Credenciales incorrectas o error de conexión con el servidor.");
         }
     };
+
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
