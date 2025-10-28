@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import decanaturaService from '../../services/decanaturaService.js'
 import { useEffect } from 'react'
+import Swal from "sweetalert2";
 
 function DashboardDecano() {
 
@@ -99,6 +100,23 @@ function DashboardDecano() {
     const [modalAbierto, setModalAbierto] = useState(false)
     const [solicitudSeleccionada, setSolicitudSeleccionada] = useState(null)
 
+    const confirmarAccion = async (accion, id, callback) => {
+        const result = await Swal.fire({
+            title: `¿Deseas ${accion} esta solicitud?`,
+            text: "Esta acción no se puede deshacer.",
+            icon: accion === "rechazar" ? "warning" : "question",
+            showCancelButton: true,
+            confirmButtonText: `Sí, ${accion}`,
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: accion === "rechazar" ? "#d33" : "#3085d6",
+        });
+
+        if (result.isConfirmed) {
+            await callback(id);
+            Swal.fire("¡Hecho!", `La solicitud ha sido ${accion} correctamente.`, "success");
+        }
+    };
+
     useEffect(() => {
         const cargarDatos = async () => {
             try {
@@ -149,35 +167,42 @@ function DashboardDecano() {
     const navigate = useNavigate()
 
     const handleAprobar = async (id) => {
-        try {
-            await decanaturaService.cambiarEstadoSolicitud(id, "ACEPTAR")
-            setSolicitudes(solicitudes.map(sol => sol.id === id ? { ...sol, estado: "APROBADA" } : sol))
-        } catch (error) {
-            console.error("Error al aprobar solicitud:", error)
-            alert("No se pudo aprobar la solicitud.")
-        }
-    }
+        await confirmarAccion("aprobar", id, async (solicitudId) => {
+            try {
+                await decanaturaService.cambiarEstadoSolicitud(solicitudId, "ACEPTAR");
+                setSolicitudes(solicitudes.map(sol => sol.id === solicitudId ? { ...sol, estado: "APROBADA" } : sol));
+            } catch (error) {
+                console.error("Error al aprobar solicitud:", error);
+                Swal.fire("Error", "No se pudo aprobar la solicitud.", "error");
+            }
+        });
+    };
 
     const handleRechazar = async (id) => {
-        try {
-            await decanaturaService.cambiarEstadoSolicitud(id, "DECLINAR")
-            setSolicitudes(solicitudes.map(sol => sol.id === id ? { ...sol, estado: "RECHAZADA" } : sol))
-        } catch (error) {
-            console.error("Error al rechazar solicitud:", error)
-            alert("No se pudo rechazar la solicitud.")
-        }
-    }
+        await confirmarAccion("rechazar", id, async (solicitudId) => {
+            try {
+                await decanaturaService.cambiarEstadoSolicitud(solicitudId, "DECLINAR");
+                setSolicitudes(solicitudes.map(sol => sol.id === solicitudId ? { ...sol, estado: "RECHAZADA" } : sol));
+            } catch (error) {
+                console.error("Error al rechazar solicitud:", error);
+                Swal.fire("Error", "No se pudo rechazar la solicitud.", "error");
+            }
+        });
+    };
 
     const handleSolicitarInfo = async (id) => {
-        try {
-            await decanaturaService.cambiarEstadoSolicitud(id, "SOLICITAR_INFO")
-            alert(`Se ha solicitado información adicional para la solicitud ${id}`)
-            setSolicitudes(solicitudes.map(sol => sol.id === id ? { ...sol, estado: "INFORMACION_ADICIONAL" } : sol))
-        } catch (error) {
-            console.error("Error al solicitar información adicional:", error)
-            alert("No se pudo solicitar información adicional.")
-        }
-    }
+        await confirmarAccion("solicitar información", id, async (solicitudId) => {
+            try {
+                await decanaturaService.cambiarEstadoSolicitud(solicitudId, "SOLICITAR_INFO");
+                setSolicitudes(solicitudes.map(sol => sol.id === solicitudId ? { ...sol, estado: "INFORMACION_ADICIONAL" } : sol));
+            } catch (error) {
+                console.error("Error al solicitar información:", error);
+                Swal.fire("Error", "No se pudo solicitar información adicional.", "error");
+            }
+        });
+    };
+
+
 
     const getBadgeColor = (estado) => {
         switch (estado) {
@@ -254,6 +279,7 @@ function DashboardDecano() {
                         </a>
                         <a
                             href="#"
+                            onClick={() => navigate("/decanatura/solicitudes")}
                             className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -266,6 +292,7 @@ function DashboardDecano() {
                             </svg>
                             Solicitudes
                         </a>
+
                         <a
                             href="#"
                             className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
@@ -560,14 +587,6 @@ function DashboardDecano() {
                             <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                                 <h3 className="text-lg font-bold text-gray-900 mb-3">Información del Estudiante</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    <div>
-                                        <p className="text-sm text-gray-600">Nombre</p>
-                                        <p className="font-semibold text-gray-900">{solicitudSeleccionada.nombre}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Programa</p>
-                                        <p className="font-semibold text-gray-900">{solicitudSeleccionada.programa}</p>
-                                    </div>
                                     <div>
                                         <p className="text-sm text-gray-600">Curso</p>
                                         <p className="font-semibold text-gray-900">{solicitudSeleccionada.curso}</p>

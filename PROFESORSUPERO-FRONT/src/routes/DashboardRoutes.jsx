@@ -13,6 +13,7 @@ import AdministrarFechas from "../modules/administrador/AdministrarFechas.jsx";
 import VerSolicitudesAdmin from "../modules/administrador/VerSolicitudesAdmin.jsx";
 import AdministrarMaterias from "../modules/administrador/AdministrarMaterias.jsx";
 import AdministrarGrupos from "../modules/administrador/AdministrarGrupos.jsx";
+import SolicitudesDecano from "../modules/decanatura/SolicitudesDecano.jsx";
 
 function DashboardRoutes() {
     return (
@@ -31,6 +32,7 @@ function DashboardRoutes() {
             <Route path="/admin/solicitudes" element={<VerSolicitudesAdmin />} />
             <Route path="/admin/materias" element={<AdministrarMaterias />} />
             <Route path="/admin/grupos" element={<AdministrarGrupos />} />
+            <Route path="/decano/solicitudes" element={<SolicitudesDecano />} />
         </Routes>
     );
 }
