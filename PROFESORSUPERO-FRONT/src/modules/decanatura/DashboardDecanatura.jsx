@@ -1,13 +1,27 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import decanaturaService from '../../services/decanaturaService.js'
+import { useEffect } from 'react'
 
 function DashboardDecano() {
+
+    const [solicitudes, setSolicitudes] = useState([])
+    const [stats, setStats] = useState({
+        pendientes: 0,
+        enProceso: 0,
+        aprobadas: 0,
+        total: 0,
+    })
+
+    /*
     const [stats] = useState({
         pendientes: 12,
         enProceso: 8,
         aprobadas: 24,
         total: 44,
     })
+
+     */
 
     const [avisos] = useState([
         {
@@ -22,6 +36,7 @@ function DashboardDecano() {
         },
     ])
 
+    /*
     const [solicitudes, setSolicitudes] = useState([
         {
             id: "#SOL-2025-001",
@@ -77,36 +92,102 @@ function DashboardDecano() {
         },
     ])
 
+     */
+
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const [modalAbierto, setModalAbierto] = useState(false)
     const [solicitudSeleccionada, setSolicitudSeleccionada] = useState(null)
 
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                const user = JSON.parse(localStorage.getItem("user"));
+                if (!user) {
+                    console.warn("No se encontró el usuario en localStorage");
+                    return;
+                }
+
+                // Extraer la facultad desde el usuario
+                const facultadId = user.facultad?.id;
+                if (!facultadId) {
+                    console.warn("El usuario no tiene facultad asociada");
+                    return;
+                }
+
+                console.log("🔍 Cargando solicitudes de facultad:", facultadId);
+
+                // Obtener las solicitudes de esa facultad
+                const data = await decanaturaService.obtenerSolicitudesPorFacultad(facultadId);
+                setSolicitudes(data);
+
+                // Calcular estadísticas dinámicas
+                const pendientes = data.filter(s => s.estado === "PENDIENTE").length;
+                const enProceso = data.filter(s => s.estado === "INFORMACION_ADICIONAL").length;
+                const aprobadas = data.filter(s => s.estado === "APROBADA").length;
+
+                console.log("🟢 Datos recibidos desde el backend:", data);
+                console.log("📦 Usuario almacenado:", user);
+
+                setSolicitudes(data);
+
+                setStats({
+                    pendientes,
+                    enProceso,
+                    aprobadas,
+                    total: data.length,
+                });
+            } catch (error) {
+                console.error("Error cargando datos de decanatura:", error);
+            }
+        };
+
+        cargarDatos();
+    }, []);
+
+
     const navigate = useNavigate()
 
-    const handleAprobar = (id) => {
-        setSolicitudes(solicitudes.map((sol) => (sol.id === id ? { ...sol, estado: "Aprobada" } : sol)))
+    const handleAprobar = async (id) => {
+        try {
+            await decanaturaService.cambiarEstadoSolicitud(id, "ACEPTAR")
+            setSolicitudes(solicitudes.map(sol => sol.id === id ? { ...sol, estado: "APROBADA" } : sol))
+        } catch (error) {
+            console.error("Error al aprobar solicitud:", error)
+            alert("No se pudo aprobar la solicitud.")
+        }
     }
 
-    const handleRechazar = (id) => {
-        setSolicitudes(solicitudes.map((sol) => (sol.id === id ? { ...sol, estado: "Rechazada" } : sol)))
+    const handleRechazar = async (id) => {
+        try {
+            await decanaturaService.cambiarEstadoSolicitud(id, "DECLINAR")
+            setSolicitudes(solicitudes.map(sol => sol.id === id ? { ...sol, estado: "RECHAZADA" } : sol))
+        } catch (error) {
+            console.error("Error al rechazar solicitud:", error)
+            alert("No se pudo rechazar la solicitud.")
+        }
     }
 
-    const handleSolicitarInfo = (id) => {
-        // TODO: Integrate with API to send request for additional information
-        alert(`Se ha enviado una solicitud de información adicional al estudiante para la solicitud ${id}`)
-        setSolicitudes(solicitudes.map((sol) => (sol.id === id ? { ...sol, estado: "En Proceso" } : sol)))
+    const handleSolicitarInfo = async (id) => {
+        try {
+            await decanaturaService.cambiarEstadoSolicitud(id, "SOLICITAR_INFO")
+            alert(`Se ha solicitado información adicional para la solicitud ${id}`)
+            setSolicitudes(solicitudes.map(sol => sol.id === id ? { ...sol, estado: "INFORMACION_ADICIONAL" } : sol))
+        } catch (error) {
+            console.error("Error al solicitar información adicional:", error)
+            alert("No se pudo solicitar información adicional.")
+        }
     }
 
     const getBadgeColor = (estado) => {
         switch (estado) {
-            case "Pendiente":
+            case "PENDIENTE":
                 return "bg-yellow-100 text-yellow-800"
-            case "En Proceso":
+            case "INFORMACION_ADICIONAL":
                 return "bg-blue-100 text-blue-800"
-            case "Aprobada":
+            case "APROBADA":
                 return "bg-green-100 text-green-800"
-            case "Rechazada":
+            case "RECHAZADA":
                 return "bg-red-100 text-red-800"
             default:
                 return "bg-gray-100 text-gray-800"
@@ -501,17 +582,25 @@ function DashboardDecano() {
                             <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                                 <h3 className="text-lg font-bold text-gray-900 mb-3">Tipo de Solicitud</h3>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-3xl">{getTipoIcon(solicitudSeleccionada.tipo)}</span>
+    <span className="text-3xl">
+      {getTipoIcon(solicitudSeleccionada.tipoSolicitud)}
+    </span>
                                     <div>
-                                        <p className="font-semibold text-gray-900 text-lg">{solicitudSeleccionada.tipo}</p>
+                                        <p className="font-semibold text-gray-900 text-lg">
+                                            {{
+                                                CAMBIO_MATERIA: "Cambio de materia",
+                                                CAMBIO_GRUPO: "Cambio de grupo",
+                                            }[solicitudSeleccionada.tipoSolicitud] || solicitudSeleccionada.tipoSolicitud}
+                                        </p>
                                         <span
                                             className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mt-1 ${getBadgeColor(solicitudSeleccionada.estado)}`}
                                         >
-                      {solicitudSeleccionada.estado}
-                    </span>
+        {solicitudSeleccionada.estado}
+      </span>
                                     </div>
                                 </div>
                             </div>
+
 
                             {solicitudSeleccionada.tipo === "Cambio de materia" && (
                                 <div className="bg-green-50 rounded-lg p-4 border border-green-200">
