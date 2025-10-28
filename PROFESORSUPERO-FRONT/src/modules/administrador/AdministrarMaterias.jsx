@@ -1,4 +1,3 @@
-// src/pages/Administrador/AdministrarMaterias.jsx
 import { useState, useEffect } from 'react';
 import { FaBook, FaEdit, FaTrash, FaPlus, FaSearch, FaTimes } from 'react-icons/fa';
 import Input from '../../components/ui/Input';
@@ -10,27 +9,21 @@ function AdministrarMaterias() {
     const [modalMode, setModalMode] = useState('create');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedMateria, setSelectedMateria] = useState(null);
-
-    const [formData, setFormData] = useState({
-        id: '',
-        nombre: '',
-        creditos: '',
-        prerequisitos: ''
-    });
-
+    const [formData, setFormData] = useState({ id: '', nombre: '', creditos: '' });
     const [materias, setMaterias] = useState([]);
 
     // 🔹 Obtener todas las materias desde el backend
+    const fetchMaterias = async () => {
+        try {
+            const response = await api.get('/materias');
+            setMaterias(response.data);
+        } catch (error) {
+            console.error("❌ Error al obtener materias:", error);
+            alert("No se pudieron cargar las materias desde el servidor.");
+        }
+    };
+
     useEffect(() => {
-        const fetchMaterias = async () => {
-            try {
-                const response = await api.get('/materias');
-                setMaterias(response.data);
-            } catch (error) {
-                console.error("❌ Error al obtener materias:", error);
-                alert("No se pudieron cargar las materias desde el servidor.");
-            }
-        };
         fetchMaterias();
     }, []);
 
@@ -40,59 +33,73 @@ function AdministrarMaterias() {
         materia.id.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // 🔹 Crear materia (a futuro, por ahora solo abre modal)
+    // 🔹 Crear nueva materia
     const handleCreate = () => {
         setModalMode('create');
-        setFormData({
-            id: '',
-            nombre: '',
-            creditos: '',
-            prerequisitos: ''
-        });
+        setFormData({ id: '', nombre: '', creditos: '' });
         setShowModal(true);
     };
 
-    // 🔹 Editar materia (a futuro, por ahora local)
+    // 🔹 Editar materia existente
     const handleEdit = (materia) => {
         setModalMode('edit');
         setSelectedMateria(materia);
         setFormData({
             id: materia.id,
             nombre: materia.nombre,
-            creditos: materia.creditos.toString(),
-            prerequisitos: materia.prerequisitos || ''
+            creditos: materia.creditos.toString()
         });
         setShowModal(true);
     };
 
-    // 🔹 Eliminar materia (a futuro se conectará con DELETE del backend)
-    const handleDelete = (materiaId) => {
+    // 🔹 Eliminar materia
+    const handleDelete = async (materiaId) => {
         if (window.confirm('¿Está seguro de eliminar esta materia?')) {
-            setMaterias(materias.filter(m => m.id !== materiaId));
+            try {
+                await api.delete(`/materias/id/${materiaId}`);
+                alert("Materia eliminada correctamente ✅");
+                fetchMaterias(); // recargar lista
+            } catch (error) {
+                console.error("❌ Error al eliminar materia:", error);
+                alert("No se pudo eliminar la materia.");
+            }
         }
     };
 
-    // 🔹 Guardar (por ahora local)
-    const handleSave = (e) => {
+    // 🔹 Guardar materia (crear o editar)
+    const handleSave = async (e) => {
         e.preventDefault();
 
-        if (modalMode === 'create') {
-            const newMateria = {
-                id: formData.id,
-                nombre: formData.nombre,
-                creditos: parseInt(formData.creditos),
-                prerequisitos: formData.prerequisitos
-            };
-            setMaterias([...materias, newMateria]);
-        } else {
-            setMaterias(materias.map(m =>
-                m.id === selectedMateria.id
-                    ? { ...m, nombre: formData.nombre, creditos: parseInt(formData.creditos) }
-                    : m
-            ));
-        }
+        try {
+            if (modalMode === 'create') {
+                await api.post('/materias/crear', {
+                    id: formData.id,
+                    nombre: formData.nombre,
+                    creditos: parseInt(formData.creditos)
+                });
+                alert("Materia creada correctamente ✅");
+            } else if (modalMode === 'edit') {
+                // Actualiza nombre
+                if (formData.nombre !== selectedMateria.nombre) {
+                    await api.patch(`/materias/id/${formData.id}/nombre`, null, {
+                        params: { nombre: formData.nombre }
+                    });
+                }
+                // Actualiza créditos
+                if (parseInt(formData.creditos) !== selectedMateria.creditos) {
+                    await api.patch(`/materias/id/${formData.id}/creditos`, null, {
+                        params: { creditos: parseInt(formData.creditos) }
+                    });
+                }
+                alert("Materia actualizada correctamente ✅");
+            }
 
-        setShowModal(false);
+            setShowModal(false);
+            fetchMaterias(); // recargar materias
+        } catch (error) {
+            console.error("❌ Error al guardar materia:", error);
+            alert("Ocurrió un error al guardar los cambios.");
+        }
     };
 
     // 🔹 Calcular totales
@@ -172,28 +179,22 @@ function AdministrarMaterias() {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Créditos</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prerrequisitos</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                             {filteredMaterias.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+                                    <td colSpan="4" className="px-6 py-4 text-center text-gray-500">
                                         No se encontraron materias
                                     </td>
                                 </tr>
                             ) : (
                                 filteredMaterias.map((materia) => (
                                     <tr key={materia.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {materia.id}
-                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{materia.id}</td>
                                         <td className="px-6 py-4 text-sm text-gray-900">{materia.nombre}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{materia.creditos}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {materia.prerequisitos || 'Ninguno'}
-                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button onClick={() => handleEdit(materia)} className="text-blue-600 hover:text-blue-900 mr-4">
                                                 <FaEdit className="inline mr-1" /> Editar
@@ -210,7 +211,7 @@ function AdministrarMaterias() {
                     </div>
                 </div>
 
-                {/* RESUMEN */}
+                {/* ESTADÍSTICAS */}
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white rounded-lg shadow-md p-4">
                         <p className="text-sm text-gray-600">Total Materias</p>
@@ -229,7 +230,7 @@ function AdministrarMaterias() {
                 </div>
             </div>
 
-            {/* MODAL (solo visual, aún no conectado al backend) */}
+            {/* MODAL */}
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
@@ -253,6 +254,7 @@ function AdministrarMaterias() {
                                             onChange={(e) => setFormData({ ...formData, id: e.target.value })}
                                             placeholder="Ej: ISOFT-101"
                                             required
+                                            disabled={modalMode === 'edit'}
                                         />
                                         <Input
                                             label="Créditos"
@@ -273,14 +275,6 @@ function AdministrarMaterias() {
                                         onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                                         placeholder="Ej: Programación Orientada a Objetos"
                                         required
-                                    />
-
-                                    <Input
-                                        label="Prerrequisitos"
-                                        type="text"
-                                        value={formData.prerequisitos}
-                                        onChange={(e) => setFormData({ ...formData, prerequisitos: e.target.value })}
-                                        placeholder="Ej: ISOFT-100 (opcional)"
                                     />
                                 </div>
 
@@ -309,4 +303,5 @@ function AdministrarMaterias() {
 }
 
 export default AdministrarMaterias;
+
 
