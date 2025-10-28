@@ -41,6 +41,7 @@ function Login() {
                 facultad: userData.facultad || null,
             };
             localStorage.setItem("user", JSON.stringify(userToStore));
+            localStorage.setItem("id", userToStore.id);
 
             // Redirigir según el rol
             if (userData.rol === "ESTUDIANTE") {

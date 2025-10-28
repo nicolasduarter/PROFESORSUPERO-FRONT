@@ -13,7 +13,9 @@ function VerSolicitudes() {
     const [error, setError] = useState(null)
 
     // ID del estudiante (temporal)
-    const estudianteId = "68ffdf636312610a6665f3ee"
+    const estudianteId = localStorage.getItem("id")
+
+    console.log(estudianteId)
 
     useEffect(() => {
         const fetchSolicitudesYMaterias = async () => {
