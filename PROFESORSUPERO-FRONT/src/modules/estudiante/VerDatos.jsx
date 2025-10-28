@@ -62,13 +62,13 @@ export default function VerDatos() {
                         <h1 className="text-xl font-bold">Información del Estudiante</h1>
                     </div>
                     <nav className="flex gap-6">
-                        <button onClick={() => navigate("/dashboard")} className="hover:text-gray-300">
+                        <button onClick={() => navigate("/dashboard/estudiante")} className="hover:text-gray-300">
                             Dashboard
                         </button>
                         <button onClick={() => navigate("/dashboard/estudiante/solicitudes")} className="hover:text-gray-300">
                             Solicitudes
                         </button>
-                        <button onClick={() => navigate("/login")} className="hover:text-gray-300">
+                        <button onClick={() => navigate("/")} className="hover:text-gray-300">
                             Cerrar Sesión
                         </button>
                     </nav>
