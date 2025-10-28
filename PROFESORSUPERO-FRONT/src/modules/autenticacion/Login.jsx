@@ -33,8 +33,14 @@ function Login() {
 
             console.log("✅ Login exitoso:", userData);
 
-            // Guardar los datos del usuario (por ejemplo, en localStorage)
-            localStorage.setItem("user", JSON.stringify(userData));
+            // Guardar los datos del usuario (incluyendo facultad e id si existen)
+            const userToStore = {
+                id: userData.id,
+                usuario: userData.usuario,
+                rol: userData.rol,
+                facultad: userData.facultad || null,
+            };
+            localStorage.setItem("user", JSON.stringify(userToStore));
 
             // Redirigir según el rol
             if (userData.rol === "ESTUDIANTE") {
