@@ -3,6 +3,7 @@ import DashboardEstudiante from "../modules/estudiante/DashboardEstudiante"
 import CrearSolicitud from "../modules/estudiante/CrearSolicitud"
 import VerSolicitudes from "../modules/estudiante/VerSolicitudes"
 import VerHorario from "../modules/estudiante/VerHorario"
+import VerDatos from "../modules/estudiante/VerDatos.jsx"
 import DashboardDecano from "../modules/decanatura/DashboardDecanatura.jsx";
 import DashboardAdministrador from "../modules/administrador/DashboardAdministrador.jsx";
 import AdministrarUsuarios from "../modules/administrador/AdministrarUsuarios.jsx";
@@ -20,6 +21,7 @@ function DashboardRoutes() {
             <Route path="/estudiante/crear-solicitud" element={<CrearSolicitud />} />
             <Route path="/estudiante/solicitudes" element={<VerSolicitudes />} />
             <Route path="/estudiante/horario" element={<VerHorario />} />
+                <Route path="/estudiante/datos" element={<VerDatos />} />
             <Route path="decano" element={<DashboardDecano />} />
             <Route path="decano/reportes" element={<ReportesEstadisticas />} />
             <Route path="/administrador" element={<DashboardAdministrador />} />
@@ -29,7 +31,6 @@ function DashboardRoutes() {
             <Route path="/admin/solicitudes" element={<VerSolicitudesAdmin />} />
             <Route path="/admin/materias" element={<AdministrarMaterias />} />
             <Route path="/admin/grupos" element={<AdministrarGrupos />} />
-
         </Routes>
     );
 }

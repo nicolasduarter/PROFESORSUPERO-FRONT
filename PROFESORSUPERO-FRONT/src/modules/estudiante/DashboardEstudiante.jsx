@@ -145,6 +145,27 @@ function DashboardEstudiante() {
                             </div>
                         </button>
 
+                        {/* Ver datos */}
+                        <button
+                            onClick={() => navigate("/dashboard/estudiante/datos")}
+                            className="bg-green-400 hover:bg-green-500 rounded-xl shadow-lg p-8 transition-all transform hover:scale-105"
+                        >
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <div className="bg-white p-4 rounded-full">
+                                    <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M5.121 17.804A4 4 0 018 16h8a4 4 0 012.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
+                                    </svg>
+                                </div>
+                                <span className="text-xl font-semibold text-gray-900">Ver Datos del Estudiante</span>
+                            </div>
+                        </button>
+
+
                         {/* Ver Semáforo Card */}
                         <div className="bg-green-400 hover:bg-green-500 rounded-xl shadow-lg p-8 transition-all transform hover:scale-105 cursor-pointer">
                             <div className="flex flex-col items-center justify-center space-y-4">
